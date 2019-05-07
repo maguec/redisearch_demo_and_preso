@@ -95,5 +95,10 @@ def show_rank(rank_id):
     thecompany = client.search(Query(rank_id).limit_fields('Rank'))
     return render_template('company.html', company=thecompany.docs)
 
+@app.route('/show', methods=['POST'])
+def wtf():
+    print(request.form.keys)
+    return "GOTCHA"
+
 if __name__ == '__main__':
    app.run()
