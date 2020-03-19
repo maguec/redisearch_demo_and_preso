@@ -86,7 +86,7 @@ six==1.12.0
 system-service==0.3
 systemd-python==234
 tasklib==1.1.0
-typed-ast==1.3.1
+typed-ast==1.3.2
 tzlocal==1.5.1
 ubuntu-drivers-common==0.0.0
 ufw==0.36
