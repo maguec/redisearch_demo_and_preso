@@ -97,7 +97,7 @@ def show_rank(rank_id):
 
 @app.route('/show', methods=['POST'])
 def wtf():
-    print(request.form.keys)
+    print(request.form.get('baz'))
     return "GOTCHA"
 
 if __name__ == '__main__':
