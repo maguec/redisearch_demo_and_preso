@@ -14,7 +14,11 @@ import redis
 import json
 import string
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='/docs', 
+            static_folder='docs',
+)
+
 bootstrap = Bootstrap()
 
 if environ.get('REDIS_SERVER') is not None:
@@ -51,6 +55,7 @@ topbar = Navbar('',
     View('Aggregations', 'show_agg'),
     View('CEO Search', 'search_ceo'),
     View('Tag Search', 'search_tags'),
+    View('Presentation', 'preso'),
 )
 nav.register_element('top', topbar)
 
@@ -119,6 +124,10 @@ def display_tags():
    res = [(lambda x: [x.rank, x.company, x.tags]) (x) for x in client.search(q).docs]
    return render_template('displaytags.html', companies = res)
 
+
+@app.route('/preso')
+def preso():
+   return redirect("/docs/index.html", code=302)
 
 
 if __name__ == '__main__':
