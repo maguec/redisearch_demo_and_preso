@@ -93,7 +93,11 @@ def agg_show():
    rows = agg_by(a['agg'])
    # Filter and Capitalize the strings
    rows=[(lambda x: [string.capwords(x[1]), x[3]])(x) for x in rows]
-   return render_template('aggresults.html', rows = rows, field = a['agg'].replace("@", '').capitalize())
+   return render_template(
+      'aggresults.html',
+      rows = rows,
+      query = 'FT.AGGREGATE fortune500 "*" GROUPBY 1 {} REDUCE COUNT 0 AS my_count SORTBY 2 @my_count DESC'.format(a['agg']),
+      field = a['agg'].replace("@", '').capitalize())
 
 @app.route('/autocomplete')
 def auto_complete():
