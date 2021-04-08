@@ -1,0 +1,76 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}RediSearch Autocomplete{% endblock %}
+
+{% block navbar %}
+{{ nav.top.render() }}
+{% endblock %}
+
+{% block metas %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock %}
+
+{% block styles %}
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="//jqueryui.com/resources/demos/style.css">
+  <style>
+  .ui-autocomplete-loading {
+    background: white url("http://jqueryui.com/resources/demos/autocomplete/images/ui-anim_basic_16x16.gif") right center no-repeat;
+  }
+  </style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+<h3>Usage:</h3>
+<p>If running from the command line prefix with:</p>
+<pre>
+FT.SEARCH fortune500
+</pre>
+<p>This is not necessary if using <a href="http://localhost:8001">Redis Insight</a></p>
+
+<h3>Get Everything</h3>
+<pre><code>*
+</code></pre>
+<h3>Search everywhere for the term computer</h3>
+<pre><code>Computer
+</code></pre>
+<h3>Find all technology companies not in California or NewYork</h3>
+<pre><code>"@sector:Technology -@hqstate:(CA|NY)"
+</code></pre>
+<h3>Fuzzy Match the CEO</h3>
+<pre><code>@ceo:%dill%
+</code></pre>
+<h3>Exact Match the CEO</h3>
+<pre><code>@ceo:"Sean M. Connolly"
+</code></pre>
+<h3>Prefix match the company name</h3>
+<pre><code>@title:Wal*
+</code></pre>
+<h2>Find me the top 5 companies posting losses in profits</h3>
+<pre><code>"@profits:[-inf,0]" SORTBY profits ASC LIMIT 0 5
+</code></pre>
+<p>NOTE: field must be marked as Sortable</p>
+<h2>Aggregations</h2>
+<p>Aggregation functions are available here: <a href="https://oss.redislabs.com/redisearch/Aggregations/#list_of_field_apply_functions" rel="nofollow">https://oss.redislabs.com/redisearch/Aggregations/#list_of_field_apply_functions</a></p>
+<h3>Aggregate by State with a function</h3>
+<pre><code>"*" APPLY "upper(@hqstate)" as state GROUPBY 1 @state REDUCE COUNT 0 AS my_count SORTBY 2 @my_count DESC
+</code></pre>
+<h3>Aggregate by State not NY or CA</h3>
+<pre><code>"-@hqstate:(CA|NY)" GROUPBY 1 @hqstate REDUCE COUNT 0 AS my_count SORTBY 2 @my_count DESC
+</code></pre>
+<h3>Aggregate by State and Industry</h3>
+<pre><code>"*" GROUPBY 2 @hqstate @industry REDUCE COUNT 0 AS my_count SORTBY 4 @my_count DESC @hqstate DESC
+</code></pre>
+<h3>Aggregate by Sector with sum of revenues</h3>
+<pre><code>"*" GROUPBY 2 @sector @hqstate REDUCE SUM 1 @revenues SORTBY 4 @revenues DESC @hqstate DESC
+</code></pre>
+</article>
+</div>
+
+</div>
+{% endblock %}
+ 

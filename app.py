@@ -56,6 +56,7 @@ topbar = Navbar('',
     View('CEO Search', 'search_ceo'),
     View('Tag Search', 'search_tags'),
     View('Presentation', 'preso'),
+    View('Example Queries', 'example_queries'),
 )
 nav.register_element('top', topbar)
 
@@ -143,6 +144,9 @@ def preso():
    return redirect("/docs/index.html", code=302)
 
 
+@app.route('/example')
+def example_queries():
+   return render_template('example_queries.html')
 if __name__ == '__main__':
    bootstrap.init_app(app)
    nav.init_app(app)
