@@ -114,11 +114,11 @@ def search_ceo():
 def display_ceo():
    form = request.form.to_dict()
    try:
-      ceos = [(lambda x: [x.company, x.ceo, x.ceoTitle]) (x) for x in client.search(Query(form["ceo"]).limit_fields('ceo')).docs]
+      ceos = [(lambda x: [x.company, x.ceo, x.ceoTitle]) (x) for x in client.search(Query(form["ceo"]).limit_fields('ceo').paging(0, 100)).docs]
       return render_template(
          'displayceos.html',
          ceos = ceos,
-         query='FT.SEARCH fortune500 "{}" INFIELDS 1 ceo LIMIT 0 10'.format(form["ceo"]),
+         query='FT.SEARCH fortune500 "{}" INFIELDS 1 ceo LIMIT 0 100'.format(form["ceo"]),
       )
    except Exception as e:
       return "<html><body><script> var timer = setTimeout(function() { window.location='/searchceo' }, 5000); </script> Bad Query : %s try again with  &percnt;NAME&percnt;</body> </html>" % e
