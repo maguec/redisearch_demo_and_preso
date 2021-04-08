@@ -64,6 +64,7 @@ def agg_by(field):
    return (client.aggregate(ar).rows)
 
 def search_data(company):
+   print(Query(company).limit_fields('title').verbatim().summarize())
    j = client.search(Query(company).limit_fields('title').verbatim()).docs[0].__dict__
    del j['id']
    del j['payload']
@@ -79,7 +80,8 @@ def index():
 def display():
    display = request.form
    info = search_data(display['account'])
-   return render_template('results.html', result = info)
+   query = 'FT.SEARCH fortune500 "{}" INFIELDS 1 title VERBATIM LIMIT 0 1'.format(display['account'])
+   return render_template('results.html', result = info, query=query )
 
 @app.route('/aggregate')
 def show_agg():
