@@ -114,7 +114,11 @@ def display_ceo():
    form = request.form.to_dict()
    try:
       ceos = [(lambda x: [x.company, x.ceo, x.ceoTitle]) (x) for x in client.search(Query(form["ceo"]).limit_fields('ceo')).docs]
-      return render_template('displayceos.html', ceos = ceos)
+      return render_template(
+         'displayceos.html',
+         ceos = ceos,
+         query='FT.SEARCH fortune500 "{}" INFIELDS 1 ceo LIMIT 0 10'.format(form["ceo"]),
+      )
    except Exception as e:
       return "<html><body><script> var timer = setTimeout(function() { window.location='/searchceo' }, 5000); </script> Bad Query : %s try again with  &percnt;NAME&percnt;</body> </html>" % e
 
@@ -128,7 +132,10 @@ def display_tags():
    tags = request.form.getlist('tgs')
    q = Query("@tags:{%s}" %("|".join(tags))).sort_by('rank', asc=True).paging(0, 100)
    res = [(lambda x: [x.rank, x.company, x.tags]) (x) for x in client.search(q).docs]
-   return render_template('displaytags.html', companies = res)
+   return render_template(
+      'displaytags.html',
+      query='FT.SEARCH fortune500 "@tags:{{{}}}" SORTBY rank ASC LIMIT 0 100'.format("|".join(tags)),
+      companies = res)
 
 
 @app.route('/preso')
