@@ -8,7 +8,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.3
 MarkupSafe==1.1.1
 redis==3.5.3
-redisearch==2.0.0
+git+https://github.com/RediSearch/redisearch-py
 rmtest==0.7.0
 six==1.15.0
 visitor==0.1.3
